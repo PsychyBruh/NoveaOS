@@ -1,0 +1,6 @@
+{
+    "id": "novea.runtime",
+    "version": "1.0.0",
+    "type": "library",
+    "source": "index.js"
+}

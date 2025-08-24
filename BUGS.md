@@ -1,0 +1,3 @@
+- The context menu is buggy as shit and likes to go where ever it wants
+- Closing context menu can be buggy
+- Resizing or dragging apps on top of other apps that a lot of resources can be laggy (Ex. the browser)

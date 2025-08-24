@@ -1,0 +1,29 @@
+{
+	"type": "module",
+	"scripts": {
+		"build": "bash ./scripts/build.sh",
+		"build:windows": "pwsh -File ./scripts/build.ps1",
+		"start": "node ./scripts/server.js",
+		"dev": "node ./scripts/dev.js",
+		"dev:windows": "node ./scripts/dev-windows.js",
+		"cloc": "bash ./scripts/cloc.sh"
+	},
+	"devDependencies": {
+		"@types/node": "^24.0.3",
+		"@types/wicg-file-system-access": "^2023.10.6",
+		"esbuild": "^0.25.5",
+		"express": "^5.1.0",
+		"typescript": "^5.8.3",
+		"wisp-server-node": "^1.1.7",
+		"ws": "^8.18.0"
+	},
+	"dependencies": {
+		"@mercuryworkshop/bare-mux": "^2.1.7",
+		"@titaniumnetwork-dev/ultraviolet": "^3.2.10",
+		"comlink": "^4.4.2",
+		"jszip": "^3.10.1",
+		"libcurl.js": "^0.7.1",
+		"mime": "^4.0.7",
+		"uuid": "^11.1.0"
+	}
+}
