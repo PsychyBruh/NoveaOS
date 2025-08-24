@@ -21,7 +21,7 @@ interface UpdateInfo {
 }
 
 export class OSUpdateManager {
-    private readonly GITHUB_API = 'https://api.github.com/repos/noveaos/NoveaOS/releases/latest';
+    private readonly GITHUB_API = 'https://api.github.com/repos/PsychyBruh/NoveaOS/releases/latest';
     private readonly P2P_UPDATE_SERVER = 'https://your-p2p-server.com/updates'; // You'll set this
     
     /**

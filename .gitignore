@@ -5,4 +5,5 @@ dist-transport/
 apps/
 build/
 .vscode/
+wisp-client-js/
 p2p.json
