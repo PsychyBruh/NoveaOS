@@ -8,7 +8,7 @@ export const PRECACHE_RESOURCES = [
     '/uuid',
     '/dist/index.js',
     '/dist/index.js.map',
-    '/uv/uv.config.js',
+    '/libs/noveanet/nn.config.js',
     '/apps/org.nebulaservices.about.zip',
     '/apps/org.nebulaservices.browser.zip',
     '/apps/org.nebulaservices.files.zip',

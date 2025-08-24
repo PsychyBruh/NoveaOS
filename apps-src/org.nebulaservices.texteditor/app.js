@@ -1,4 +1,4 @@
-async function main() {
+﻿async function main() {
     const tabsEl = document.getElementById("tabs");
     const tabContentEl = document.getElementById("tabContent");
     const newFileBtn = document.getElementById("newFileBtn");
@@ -128,9 +128,9 @@ async function main() {
 
         try {
             if (file.path) {
-                await parent.xen.fs.write(file.path, textareaContent);
+                await parent.novea.fs.write(file.path, textareaContent);
                 file.saved = true;
-                await parent.xen.notifications.spawn({
+                await parent.novea.notifications.spawn({
                     title: "Saved",
                     description: `File saved to ${file.path}`,
                     icon: "/assets/logo.svg",
@@ -140,7 +140,7 @@ async function main() {
                 await saveFileAs(id, textareaContent);
             }
         } catch (e) {
-            await parent.xen.notifications.spawn({
+            await parent.novea.notifications.spawn({
                 title: "Save Error",
                 description: `Error saving file: ${e.message}`,
                 icon: "/assets/logo.svg",
@@ -151,14 +151,14 @@ async function main() {
 
     async function saveFileAs(id, content) {
         try {
-            const h = await parent.xen.FilePicker.pick({});
+            const h = await parent.novea.FilePicker.pick({});
             const newPath = h.path;
 
             if (!newPath) {
                 return;
             }
 
-            await parent.xen.fs.write(newPath, content);
+            await parent.novea.fs.write(newPath, content);
 
             const file = openFiles.get(id);
             file.path = newPath;
@@ -171,14 +171,14 @@ async function main() {
             if (activeTabEl) {
                 activeTabEl.querySelector("span").textContent = file.name;
             }
-            await parent.xen.notifications.spawn({
+            await parent.novea.notifications.spawn({
                 title: "Saved As",
                 description: `File saved as ${newPath}`,
                 icon: "/assets/logo.svg",
                 timeout: 3000,
             });
         } catch (e) {
-            await parent.xen.notifications.spawn({
+            await parent.novea.notifications.spawn({
                 title: "Error",
                 description: `Error saving file: ${e.message}`,
                 icon: "/assets/logo.svg",
@@ -189,7 +189,7 @@ async function main() {
 
     async function openFile() {
         try {
-            const pickerResult = await parent.xen.FilePicker.pick({
+            const pickerResult = await parent.novea.FilePicker.pick({
                 title: "Open File",
                 multiple: false,
                 mode: "file",
@@ -230,7 +230,7 @@ async function main() {
             }
         } catch (e) {
             if (e.name !== "AbortError") {
-                await parent.xen.notifications.spawn({
+                await parent.novea.notifications.spawn({
                     title: "Error",
                     description: `Error opening file: ${e.message}`,
                     icon: "/assets/logo.svg",
@@ -248,7 +248,7 @@ async function main() {
         const file = openFiles.get(id);
 
         if (!file || !file.path) {
-            await parent.xen.notifications.spawn({
+            await parent.novea.notifications.spawn({
                 title: "Rename Error",
                 description: "Cannot rename an unsaved/new file",
                 icon: "/assets/logo.svg",
@@ -260,7 +260,7 @@ async function main() {
         const oldPath = file.path;
         const oldName = file.name;
 
-        const newName = await parent.xen.dialog.prompt({
+        const newName = await parent.novea.dialog.prompt({
             title: "Rename File",
             body: `Enter new name`,
             placeholder: oldName,
@@ -271,14 +271,14 @@ async function main() {
         }
 
         try {
-            const newPath = parent.xen.fs.normalizePath(
+            const newPath = parent.novea.fs.normalizePath(
                 oldPath.substring(0, oldPath.lastIndexOf("/")) +
                 "/" +
                 newName,
             );
 
-            if (await parent.xen.fs.exists(newPath)) {
-                await parent.xen.notifications.spawn({
+            if (await parent.novea.fs.exists(newPath)) {
+                await parent.novea.notifications.spawn({
                     title: "Rename Error",
                     description: `A file/directory named "${newName}" already exists`,
                     icon: "/assets/logo.svg",
@@ -287,7 +287,7 @@ async function main() {
                 return;
             }
 
-            await parent.xen.fs.move(oldPath, newPath);
+            await parent.novea.fs.move(oldPath, newPath);
 
             file.path = newPath;
             file.name = newName;
@@ -295,7 +295,7 @@ async function main() {
 
             activeTabEl.querySelector("span").textContent = newName;
         } catch (e) {
-            await parent.xen.notifications.spawn({
+            await parent.novea.notifications.spawn({
                 title: "Rename Error",
                 description: `Error renaming file: ${e.message}`,
                 icon: "/assets/logo.svg",

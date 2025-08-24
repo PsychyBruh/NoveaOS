@@ -1,6 +1,6 @@
-class TaskManager {
+﻿class TaskManager {
     constructor() {
-        this.pm = parent.xen.process;
+        this.pm = parent.novea.process;
         this.refreshInterval = null;
         this.init();
     }
@@ -24,15 +24,15 @@ class TaskManager {
         /*
         let wID = 0;
 
-        parent.xen.wm.windows.forEach((win, index) => {
+        parent.novea.wm.windows.forEach((win, index) => {
             if (win.el.content.contentWindow.location.href === location.href) {
                 wID = index;
                 return;
             }
         });
 
-        const win = parent.xen.wm.windows[wID].el.content;
-        const tWin = parent.xen.wm.create({ url: 'https://example.com' });
+        const win = parent.novea.wm.windows[wID].el.content;
+        const tWin = parent.novea.wm.create({ url: 'https://example.com' });
 
         tWin.el.content.addEventListener('load', () => {
             win.contentWindow.ChiiDevtoolsIframe = tWin.el.content;

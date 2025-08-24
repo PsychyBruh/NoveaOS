@@ -1,4 +1,4 @@
-import { FileSystem, FileEntryInfo, FileStat } from "./FileSystem";
+﻿import { FileSystem, FileEntryInfo, FileStat } from "./FileSystem";
 import JSZip from "jszip";
 import mime from "mime";
 
@@ -28,7 +28,7 @@ export class XenFS extends FileSystem {
         let currentPath = this.normalizePath(path);
 
         if (resolveLink) {
-            const symlinks = window.xen.settings.get("symlinks") || {};
+            const symlinks = window.novea.settings.get("symlinks") || {};
 
             if (symlinks[currentPath]) {
                 currentPath = symlinks[currentPath];
@@ -233,7 +233,7 @@ export class XenFS extends FileSystem {
     }
 
     async rm(path: string): Promise<void> {
-        const symlinks = window.xen.settings.get("symlinks") || {};
+        const symlinks = window.novea.settings.get("symlinks") || {};
 
         if (symlinks[this.normalizePath(path)]) {
             this.unlink(path);
@@ -282,7 +282,7 @@ export class XenFS extends FileSystem {
     }
 
     async fetch(url: string, path: string): Promise<void> {
-        const res = await window.xen.net.fetch(url);
+        const res = await window.novea.net.fetch(url);
         if (!res.ok)
             throw new Error(`Fetch failed: ${res.statusText} (${res.status})`);
 
@@ -450,23 +450,23 @@ export class XenFS extends FileSystem {
     async link(src: string, dest: string): Promise<void> {
         const nmSrc = this.normalizePath(src);
         const nmDest = this.normalizePath(dest);
-        const symlinks = window.xen.settings.get("symlinks") || {};
+        const symlinks = window.novea.settings.get("symlinks") || {};
 
         symlinks[nmDest] = nmSrc;
-        window.xen.settings.set("symlinks", symlinks);
+        window.novea.settings.set("symlinks", symlinks);
     }
 
     async unlink(path: string): Promise<void> {
         const nmPath = this.normalizePath(path);
-        const symlinks = window.xen.settings.get("symlinks") || {};
+        const symlinks = window.novea.settings.get("symlinks") || {};
 
         delete symlinks[nmPath];
-        window.xen.settings.set("symlinks", symlinks);
+        window.novea.settings.set("symlinks", symlinks);
     }
 
     async readlink(path: string): Promise<string> {
         const nmPath = this.normalizePath(path);
-        const symlinks = window.xen.settings.get("symlinks") || {};
+        const symlinks = window.novea.settings.get("symlinks") || {};
         const target = symlinks[nmPath];
 
         if (!target) throw new Error(`${path} is not a symbolic link`);

@@ -1,4 +1,4 @@
-import { commands } from "./commands";
+﻿import { commands } from "./commands";
 
 interface Command {
     name: string;
@@ -15,7 +15,7 @@ export class NoveaShell {
     private registry: Map<string, Command> = new Map();
     private cwd: string = "/usr";
     private paths: string[] = [];
-    private fs: typeof window.xen.fs;
+    private fs: typeof window.novea.fs;
 
     constructor() {
         this.paths = ["/usr/clis"];
@@ -29,7 +29,7 @@ export class NoveaShell {
     }
 
     async init(): Promise<void> {
-        this.fs = window.xen.fs;
+        this.fs = window.novea.fs;
         
         const rcPath = this.resolvePath("~/.xsrc");
         if (await this.fs.exists(rcPath)) {

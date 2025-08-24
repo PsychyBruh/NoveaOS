@@ -26,16 +26,17 @@ interface PackageManifest {
 
 interface RepoSettingsStore {
 	url: string;
-	type: 'xen' | 'anura';
+	type: 'xen' | 'anura' | 'novea';
 }
 
 export class RepoStore {
 	private repos: RepoSettingsStore[];
 
 	init() {
-		this.repos = window.xen.settings.get('repos');
+		this.repos = window.novea.settings.get('repos');
 
 		const defaultRepos: RepoSettingsStore[] = [
+			// Original XenOS repositories
 			{
 				url: 'https://repos.xen-os.dev/apps/',
 				type: 'xen',
@@ -44,12 +45,11 @@ export class RepoStore {
 				url: 'https://repos.xen-os.dev/webapps/',
 				type: 'xen',
 			},
-			/*
 			{
 				url: 'https://repos.xen-os.dev/games/',
 				type: 'xen',
 			},
-			*/
+			// Anura repositories
 			{
 				url: 'https://games.anura.pro',
 				type: 'anura',
@@ -66,13 +66,13 @@ export class RepoStore {
 			}
 		}
 
-		window.xen.settings.set('repos', this.repos);
+		window.novea.settings.set('repos', this.repos);
 	}
 
-	addRepo(url: string, type: 'xen' | 'anura'): void {
+	addRepo(url: string, type: 'xen' | 'anura' | 'novea'): void {
 		if (!repoHandler(new URL(url))) {
-			window.xen.notifications.spawn({
-				title: 'XenOS',
+			window.novea.notifications.spawn({
+				title: 'NoveaOS',
 				description: `The repo URL ${url} is blocked by your policies`,
 				icon: '/assets/logo.svg',
 				timeout: 2500,
@@ -85,7 +85,7 @@ export class RepoStore {
 		}
 
 		this.repos.push({ url, type });
-		window.xen.settings.set('repos', this.repos);
+		window.novea.settings.set('repos', this.repos);
 	}
 
 	removeRepo(url: string): void {
@@ -96,39 +96,39 @@ export class RepoStore {
 		}
 
 		this.repos.splice(index, 1);
-		window.xen.settings.set('repos', this.repos);
+		window.novea.settings.set('repos', this.repos);
 	}
 
 	async getManifest(repoUrl: string) {
 		const fUrl = new URL('manifest.json', repoUrl).href;
-		return await (await window.xen.net.fetch(fUrl)).json();
+		return await (await window.novea.net.fetch(fUrl)).json();
 	}
 
-	async listPackages(repoUrl: string, type: 'xen' | 'anura') {
+	async listPackages(repoUrl: string, type: 'xen' | 'anura' | 'novea') {
 		if (type === 'xen') {
 			const manifest: RepoManifest = await this.getManifest(repoUrl);
 			return manifest.packages;
 		} else if (type === 'anura') {
 			const fUrl = new URL('list.json', repoUrl).href;
-			return await (await window.xen.net.fetch(fUrl)).json();
+			return await (await window.novea.net.fetch(fUrl)).json();
 		}
 	}
 
 	async getPackage(repoUrl: string, id: string): Promise<PackageManifest> {
 		const url = new URL(`packages/${id}/manifest.json`, repoUrl).href;
-		return await (await window.xen.net.fetch(url)).json();
+		return await (await window.novea.net.fetch(url)).json();
 	}
 
 	async install(
 		repoUrl: string,
 		id: string,
-		type: 'xen' | 'anura',
+		type: 'xen' | 'anura' | 'novea',
 		anura?: 'id' | 'name',
 	) {
-		if (type === 'xen') {
-			await window.xen.packages.install(
+		if (type === 'xen' || type === 'novea') {
+			await window.novea.packages.install(
 				'url',
-				window.xen.net.encodeUrl(
+				window.novea.net.encodeUrl(
 					new URL(`packages/${id}/package.zip`, repoUrl).href,
 				),
 			);
@@ -152,9 +152,9 @@ export class RepoStore {
 
 			const url = new URL(match.data, repoUrl).href;
 
-			await window.xen.packages.anuraInstall(
+			await window.novea.packages.anuraInstall(
 				'url',
-				window.xen.net.encodeUrl(url),
+				window.novea.net.encodeUrl(url),
 			);
 		}
 	}

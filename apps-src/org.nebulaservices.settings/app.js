@@ -1,4 +1,4 @@
-function main() {
+﻿function main() {
     const wispIn = document.getElementById("wisp-url");
     const saveWispBtn = document.getElementById("save-wisp-url");
     const updateBtn = document.getElementById("check-updates");
@@ -50,21 +50,21 @@ function main() {
         navBack.disabled = path === POLICY_ROOT;
 
         try {
-            const exists = await parent.xen.fs.exists(path);
+            const exists = await parent.novea.fs.exists(path);
             if (!exists) {
-                await parent.xen.fs.mkdir(path);
+                await parent.novea.fs.mkdir(path);
             }
 
-            let entries = await parent.xen.fs.list(path);
+            let entries = await parent.novea.fs.list(path);
             policyList.innerHTML = "";
 
             if (entries.length === 0 && path === POLICY_ROOT) {
                 try {
-                    await parent.xen.policy.getPolicy("global");
-                    await parent.xen.policy.getPolicy("network");
-                    entries = await parent.xen.fs.list(path);
+                    await parent.novea.policy.getPolicy("global");
+                    await parent.novea.policy.getPolicy("network");
+                    entries = await parent.novea.fs.list(path);
                 } catch (e) {
-                    parent.xen.notifications.spawn({
+                    parent.novea.notifications.spawn({
                         title: "XenOS Policy",
                         description: `Failed to create default policies: ${e.message}`,
                         icon: `/assets/logo.svg`,
@@ -141,7 +141,7 @@ function main() {
                         savePolicyBtn.disabled = false;
 
                         try {
-                            const content = await parent.xen.fs.read(selectedPath, "text");
+                            const content = await parent.novea.fs.read(selectedPath, "text");
                             try {
                                 policyContent.value = JSON.stringify(
                                     JSON.parse(content),
@@ -150,7 +150,7 @@ function main() {
                                 );
                             } catch (e) {
                                 policyContent.value = content;
-                                parent.xen.notifications.spawn({
+                                parent.novea.notifications.spawn({
                                     title: "XenOS Policy",
                                     description: `Warning: ${entry.name} is not valid JSON`,
                                     icon: `/assets/logo.svg`,
@@ -159,7 +159,7 @@ function main() {
                             }
                         } catch (e) {
                             policyContent.value = `Error reading file: ${e.message}`;
-                            parent.xen.notifications.spawn({
+                            parent.novea.notifications.spawn({
                                 title: "XenOS Policy",
                                 description: `Failed to read ${entry.name}: ${e.message}`,
                                 icon: `/assets/logo.svg`,
@@ -171,7 +171,7 @@ function main() {
             });
         } catch (e) {
             policyList.innerHTML = `<p class="wip-message">Failed to load policies: ${e.message}</p>`;
-            parent.xen.notifications.spawn({
+            parent.novea.notifications.spawn({
                 title: "XenOS Policy",
                 description: `Failed to directory: ${e.message}`,
                 icon: `/assets/logo.svg`,
@@ -182,7 +182,7 @@ function main() {
 
     async function savePolicy() {
         if (!selectedPath || !isPolicyFile) {
-            parent.xen.notifications.spawn({
+            parent.novea.notifications.spawn({
                 title: "XenOS Policy",
                 description: "No policy file selected",
                 icon: `/assets/logo.svg`,
@@ -197,15 +197,15 @@ function main() {
                 null,
                 2,
             );
-            await parent.xen.fs.write(selectedPath, content);
-            parent.xen.notifications.spawn({
+            await parent.novea.fs.write(selectedPath, content);
+            parent.novea.notifications.spawn({
                 title: "XenOS Policy",
                 description: "Policy saved successfully!",
                 icon: `/assets/logo.svg`,
                 timeout: 2500,
             });
         } catch (e) {
-            parent.xen.notifications.spawn({
+            parent.novea.notifications.spawn({
                 title: "XenOS Policy",
                 description: `Failed to save policy: ${e.message}`,
                 icon: `/assets/logo.svg`,
@@ -216,7 +216,7 @@ function main() {
 
     async function deletePolicy() {
         if (!selectedPath) {
-            parent.xen.notifications.spawn({
+            parent.novea.notifications.spawn({
                 title: "XenOS Policy",
                 description: "No file/folder selected",
                 icon: `/assets/logo.svg`,
@@ -229,7 +229,7 @@ function main() {
             `.policy-list-item[data-path="${selectedPath}"]`,
         );
         if (!selectedEl) {
-            parent.xen.notifications.spawn({
+            parent.novea.notifications.spawn({
                 title: "XenOS Policy",
                 description: "Error: Selected item not found in list",
                 icon: `/assets/logo.svg`,
@@ -245,7 +245,7 @@ function main() {
             ? `Are you sure you want to delete the folder "${name}"? This cannot be undone`
             : `Are you sure you want to delete the file "${name}"? This cannot be undone`;
 
-        await parent.xen.dialog
+        await parent.novea.dialog
             .confirm({
                 title: "Confirm Deletion",
                 body: confirmMsg,
@@ -253,8 +253,8 @@ function main() {
             .then(async (res) => {
                 if (res === true) {
                     try {
-                        await parent.xen.fs.rm(selectedPath);
-                        parent.xen.notifications.spawn({
+                        await parent.novea.fs.rm(selectedPath);
+                        parent.novea.notifications.spawn({
                             title: "XenOS Policy",
                             description: `${isDir ? "Folder" : "File"} deleted: ${name}`,
                             icon: `/assets/logo.svg`,
@@ -262,7 +262,7 @@ function main() {
                         });
                         loadPolicies(currentPolicy);
                     } catch (e) {
-                        parent.xen.notifications.spawn({
+                        parent.novea.notifications.spawn({
                             title: "XenOS Policy",
                             description: `Failed to delete ${name}: ${e.message}`,
                             icon: `/assets/logo.svg`,
@@ -289,7 +289,7 @@ function main() {
             canCreateFile = true;
         }
 
-        const name = await parent.xen.dialog.prompt({
+        const name = await parent.novea.dialog.prompt({
             title: "Create New Policy Entry",
             body: promptBody,
             placeholder: placeholder,
@@ -299,7 +299,7 @@ function main() {
 
         const safeName = name.trim().replace(/[^a-zA-Z0-9-._/]/g, "");
         if (!safeName) {
-            parent.xen.notifications.spawn({
+            parent.novea.notifications.spawn({
                 title: "XenOS Policy",
                 description: "Invalid name provided",
                 icon: `/assets/logo.svg`,
@@ -313,7 +313,7 @@ function main() {
         const isFileAttempt = !isFolderAttempt;
 
         if (isFolderAttempt && !canCreateFolder) {
-            parent.xen.notifications.spawn({
+            parent.novea.notifications.spawn({
                 title: "XenOS Policy",
                 description: "Cannot create folders here",
                 icon: `/assets/logo.svg`,
@@ -322,7 +322,7 @@ function main() {
             return;
         }
         if (isFileAttempt && !canCreateFile) {
-            parent.xen.notifications.spawn({
+            parent.novea.notifications.spawn({
                 title: "XenOS Policy",
                 description: "Only folders can be created in /usr/policies/",
                 icon: `/assets/logo.svg`,
@@ -331,7 +331,7 @@ function main() {
             return;
         }
         if (isFileAttempt && !safeName.endsWith(".json")) {
-            parent.xen.notifications.spawn({
+            parent.novea.notifications.spawn({
                 title: "XenOS Policy",
                 description: "Only JSON files can be created",
                 icon: `/assets/logo.svg`,
@@ -342,8 +342,8 @@ function main() {
 
         try {
             if (isFolderAttempt) {
-                await parent.xen.fs.mkdir(newPath);
-                parent.xen.notifications.spawn({
+                await parent.novea.fs.mkdir(newPath);
+                parent.novea.notifications.spawn({
                     title: "XenOS Policy",
                     description: `Folder created: ${safeName}`,
                     icon: `/assets/logo.svg`,
@@ -351,8 +351,8 @@ function main() {
                 });
             } else {
                 const initialContent = JSON.stringify({}, null, 2);
-                await parent.xen.fs.write(newPath, initialContent);
-                parent.xen.notifications.spawn({
+                await parent.novea.fs.write(newPath, initialContent);
+                parent.novea.notifications.spawn({
                     title: "XenOS Policy",
                     description: `File created: ${safeName}`,
                     icon: `/assets/logo.svg`,
@@ -361,7 +361,7 @@ function main() {
             }
             loadPolicies(currentPolicy);
         } catch (e) {
-            parent.xen.notifications.spawn({
+            parent.novea.notifications.spawn({
                 title: "XenOS Policy",
                 description: `Failed to create ${safeName}: ${e.message}`,
                 icon: `/assets/logo.svg`,
@@ -396,7 +396,7 @@ function main() {
     createPolicyBtn.addEventListener("click", createPolicy);
 
     try {
-        const settings = parent.xen.settings.get("wisp-url");
+        const settings = parent.novea.settings.get("wisp-url");
         if (settings) {
             wispIn.value = settings;
         }
@@ -406,18 +406,18 @@ function main() {
         const url = wispIn.value.trim();
         if (url) {
             try {
-                let s = parent.xen.settings.get("wisp-url");
+                let s = parent.novea.settings.get("wisp-url");
                 s = url;
-                parent.xen.settings.set("wisp-url", s);
-                parent.xen.net.setUrl(url);
-                parent.xen.notifications.spawn({
+                parent.novea.settings.set("wisp-url", s);
+                parent.novea.net.setUrl(url);
+                parent.novea.notifications.spawn({
                     title: "XenOS",
                     description: `Wisp URL set to: ${url}`,
                     icon: `/assets/logo.svg`,
                     timeout: 2500,
                 });
             } catch (e) {
-                parent.xen.notifications.spawn({
+                parent.novea.notifications.spawn({
                     title: "XenOS",
                     description: `Failed to set Wisp URL: ${e.message}`,
                     icon: `/assets/logo.svg`,
@@ -431,19 +431,19 @@ function main() {
                 location.host +
                 "/wisp/";
             try {
-                let s = parent.xen.settings.get("wisp-url");
+                let s = parent.novea.settings.get("wisp-url");
                 s = defaultUrl;
-                parent.xen.settings.set("wisp-url", s);
-                parent.xen.net.setUrl(defaultUrl);
+                parent.novea.settings.set("wisp-url", s);
+                parent.novea.net.setUrl(defaultUrl);
                 wispIn.value = defaultUrl;
-                parent.xen.notifications.spawn({
+                parent.novea.notifications.spawn({
                     title: "XenOS",
                     description: `Wisp URL reset to default: ${defaultUrl}`,
                     icon: `/assets/logo.svg`,
                     timeout: 2500,
                 });
             } catch (e) {
-                parent.xen.notifications.spawn({
+                parent.novea.notifications.spawn({
                     title: "XenOS",
                     description: `Failed to reset Wisp URL to default: ${e.message}`,
                     icon: `/assets/logo.svg`,
@@ -455,15 +455,15 @@ function main() {
 
     updateBtn.addEventListener("click", async () => {
         try {
-            await parent.xen.dialog.confirm({
+            await parent.novea.dialog.confirm({
                 title: 'XenOS',
                 body: 'Checking for updates will delete the cache, the cache is what allows XenOS to prevent some filtering, are you sure you would like to continue?',
                 icon: '/assets/logo.svg'
             }).then(async res => {
                 if (res == true) {
-                    await parent.xen.update();
+                    await parent.novea.update();
 
-                    parent.xen.notifications.spawn({
+                    parent.novea.notifications.spawn({
                         title: "XenOS",
                         description: "Update checker started! Depending on your internet, this could take a while   ",
                         icon: `/assets/logo.svg`,
@@ -472,7 +472,7 @@ function main() {
                 }
             });
         } catch (e) {
-            parent.xen.notifications.spawn({
+            parent.novea.notifications.spawn({
                 title: "XenOS",
                 description: `Failed to check for updates: ${e.message}`,
                 icon: `/assets/logo.svg`,
@@ -505,7 +505,7 @@ function main() {
     }
 
     resetBtn.addEventListener("click", async () => {
-        await parent.xen.dialog
+        await parent.novea.dialog
             .confirm({
                 title: "XenOS",
                 body: "Are you sure you would like to reset your instance? This will delete ALL of your files and settings",
@@ -514,14 +514,14 @@ function main() {
                 if (res === true) {
                     try {
                         await clearAllStorage();
-                        await parent.xen.fs.rm('/system');
+                        await parent.novea.fs.rm('/system');
                         const reg = await navigator.serviceWorker.getRegistration();
                         if (reg) {
                             await reg.unregister();
                         }
                         window.parent.location.reload();
                     } catch (e) {
-                        parent.xen.notifications.spawn({
+                        parent.novea.notifications.spawn({
                             title: "XenOS",
                             description: `Failed to reset instance: ${e.message}`,
                             icon: `/assets/logo.svg`,
@@ -534,11 +534,11 @@ function main() {
 
     async function loadWallpapers() {
         try {
-            const currentWallpaper = await parent.xen.wallpaper.get();
+            const currentWallpaper = await parent.novea.wallpaper.get();
             currentWpImg.src = currentWallpaper || "";
             currentWpImg.style.display = currentWallpaper ? "block" : "none";
 
-            const wallpapers = await parent.xen.wallpaper.list();
+            const wallpapers = await parent.novea.wallpaper.list();
             wpGallery.innerHTML = "";
             if (galleryEmptyMsg) galleryEmptyMsg.style.display = "none";
 
@@ -553,9 +553,9 @@ function main() {
                         item.dataset.filename = wp.name;
 
                         item.addEventListener("click", async () => {
-                            await parent.xen.wallpaper.set(wp.name);
+                            await parent.novea.wallpaper.set(wp.name);
                             loadWallpapers();
-                            parent.xen.notifications.spawn({
+                            parent.novea.notifications.spawn({
                                 title: "XenOS UI",
                                 description: `Wallpaper set to ${wp.name}`,
                                 icon: `/assets/logo.svg`,
@@ -568,7 +568,7 @@ function main() {
                 });
             }
         } catch (e) {
-            parent.xen.notifications.spawn({
+            parent.novea.notifications.spawn({
                 title: "XenOS UI",
                 description: `Failed to load wallpapers: ${e.message}`,
                 icon: `/assets/logo.svg`,
@@ -579,16 +579,16 @@ function main() {
 
     uploadWpFileBtn.addEventListener("click", async () => {
         try {
-            await parent.xen.wallpaper.upload("prompt");
+            await parent.novea.wallpaper.upload("prompt");
             loadWallpapers();
-            parent.xen.notifications.spawn({
+            parent.novea.notifications.spawn({
                 title: "XenOS UI",
                 description: "Wallpaper uploaded successfully!",
                 icon: `/assets/logo.svg`,
                 timeout: 2500,
             });
         } catch (e) {
-            parent.xen.notifications.spawn({
+            parent.novea.notifications.spawn({
                 title: "XenOS UI",
                 description: `Failed to upload wallpaper: ${e.message}`,
                 icon: `/assets/logo.svg`,
@@ -598,7 +598,7 @@ function main() {
     });
 
     uploadWpUrlBtn.addEventListener("click", async () => {
-        const url = await parent.xen.dialog.prompt({
+        const url = await parent.novea.dialog.prompt({
             title: "Upload Wallpaper",
             body: "Enter the URL of the image:",
             placeholder: `${location.origin}/assets/wallpaper.webp`,
@@ -606,16 +606,16 @@ function main() {
 
         if (url) {
             try {
-                await parent.xen.wallpaper.upload("url", url);
+                await parent.novea.wallpaper.upload("url", url);
                 loadWallpapers();
-                parent.xen.notifications.spawn({
+                parent.novea.notifications.spawn({
                     title: "XenOS UI",
                     description: "Wallpaper uploaded from URL",
                     icon: `/assets/logo.svg`,
                     timeout: 2500,
                 });
             } catch (e) {
-                parent.xen.notifications.spawn({
+                parent.novea.notifications.spawn({
                     title: "XenOS UI",
                     description: `Failed to upload wallpaper from URL: ${e.message}`,
                     icon: `/assets/logo.svg`,
@@ -627,16 +627,16 @@ function main() {
 
     uploadWpFsBtn.addEventListener("click", async () => {
         try {
-            await parent.xen.wallpaper.upload("fs");
+            await parent.novea.wallpaper.upload("fs");
             loadWallpapers();
-            parent.xen.notifications.spawn({
+            parent.novea.notifications.spawn({
                 title: "XenOS UI",
                 description: "Wallpaper uploaded successfully!",
                 icon: `/assets/logo.svg`,
                 timeout: 2500,
             });
         } catch (e) {
-            parent.xen.notifications.spawn({
+            parent.novea.notifications.spawn({
                 title: "XenOS UI",
                 description: `Failed to upload wallpaper: ${e.message}`,
                 icon: `/assets/logo.svg`,
@@ -646,9 +646,9 @@ function main() {
     });
 
     rmWpBtn.addEventListener("click", async () => {
-        const currentWallpaper = await parent.xen.wallpaper.get();
+        const currentWallpaper = await parent.novea.wallpaper.get();
         if (!currentWallpaper || currentWallpaper.startsWith("/assets/wallpaper.webp")) {
-            parent.xen.notifications.spawn({
+            parent.novea.notifications.spawn({
                 title: "XenOS UI",
                 description: "No custom wallpaper set to remove",
                 icon: `/assets/logo.svg`,
@@ -657,7 +657,7 @@ function main() {
             return;
         }
 
-        const confirmRemove = await parent.xen.dialog.confirm({
+        const confirmRemove = await parent.novea.dialog.confirm({
             title: "Confirm Removal",
             body: "Are you sure you want to remove your wallpaper? This cannot be undone",
         });
@@ -667,16 +667,16 @@ function main() {
                 const filenameMatch = currentWallpaper.match(/\/fs\/usr\/wallpapers\/(.+)$/);
                 const filename = filenameMatch ? filenameMatch[1] : undefined;
 
-                await parent.xen.wallpaper.remove(filename);
+                await parent.novea.wallpaper.remove(filename);
                 loadWallpapers();
-                parent.xen.notifications.spawn({
+                parent.novea.notifications.spawn({
                     title: "XenOS UI",
                     description: "Wallpaper removed!",
                     icon: `/assets/logo.svg`,
                     timeout: 2500,
                 });
             } catch (e) {
-                parent.xen.notifications.spawn({
+                parent.novea.notifications.spawn({
                     title: "XenOS UI",
                     description: `Failed to remove wallpaper: ${e.message}`,
                     icon: `/assets/logo.svg`,

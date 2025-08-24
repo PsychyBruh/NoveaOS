@@ -1,13 +1,13 @@
-import { getDefault } from "./default";
+﻿import { getDefault } from "./default";
 
 async function readPolicies(folder: string): Promise<any[]> {
-    const files = await window.xen.fs.list(folder);
+    const files = await window.novea.fs.list(folder);
     const policies: any[] = [];
 
     for (const file of files) {
         if (file.isFile && file.name.endsWith(".json")) {
             const path = `${folder}/${file.name}`;
-            const content = await window.xen.fs.read(path, "text");
+            const content = await window.novea.fs.read(path, "text");
 
             if (typeof content === "string") {
                 policies.push(JSON.parse(content));
@@ -43,10 +43,10 @@ function mergePolicies(policies: any[]): any {
 
 export async function getPolicy(policy: string): Promise<any> {
     const folder = `/usr/policies/${policy}`;
-    const exists = await window.xen.fs.exists(folder);
+    const exists = await window.novea.fs.exists(folder);
 
     if (!exists) {
-        await window.xen.fs.mkdir(folder);
+        await window.novea.fs.mkdir(folder);
         const defaultPolicy = getDefault(policy);
         await setPolicy(policy, "default.json", defaultPolicy);
     }
@@ -66,9 +66,9 @@ export async function setPolicy(
     const folder = `/usr/policies/${policy}`;
     const path = `${folder}/${file}`;
 
-    if (!(await window.xen.fs.exists(folder))) {
-        await window.xen.fs.mkdir(folder);
+    if (!(await window.novea.fs.exists(folder))) {
+        await window.novea.fs.mkdir(folder);
     }
 
-    await window.xen.fs.write(path, JSON.stringify(content, null, 2));
+    await window.novea.fs.write(path, JSON.stringify(content, null, 2));
 }

@@ -52,11 +52,11 @@ export class LibcurlClient {
     private wispUrl: string;
 
     public async init() {
-        this.wispUrl = window.xen.settings.get('wisp-url');
+        this.wispUrl = window.novea.settings.get('wisp-url');
 
         if (!this.wispUrl) {
-            window.xen.settings.set('wisp-url', (location.protocol === "https:" ? "wss" : "ws") + "://" + location.host + "/wisp/");
-            this.wispUrl = window.xen.settings.get('wisp-url');
+            window.novea.settings.set('wisp-url', (location.protocol === "https:" ? "wss" : "ws") + "://" + location.host + "/wisp/");
+            this.wispUrl = window.novea.settings.get('wisp-url');
         }
 
         const lcModule = await import(this.paths.lcJs);
@@ -149,9 +149,9 @@ export class LibcurlClient {
 
             const p2pUrl = `${urlObject.protocol}//${urlObject.hostname}:${port}${urlObject.pathname}${urlObject.search}${urlObject.hash}`;
 
-            if (window.xen?.p2p?.fetch) {
-                return window.xen.p2p.fetch(peerId, p2pUrl, options);
-            } else {
+                    if (window.novea?.p2p?.fetch) {
+            return window.novea.p2p.fetch(peerId, p2pUrl, options);
+        } else {
                 return new Response("P2P client not available", {
                     status: 503,
                     statusText: "Service Unavailable",

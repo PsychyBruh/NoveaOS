@@ -1,5 +1,5 @@
-// FS implementation that stores all files in a map
-class ExampleFS extends window.xen.FileSystem {
+﻿// FS implementation that stores all files in a map
+class ExampleFS extends window.novea.FileSystem {
     constructor() {
         super();
         this.nodes = new Map();
@@ -213,4 +213,4 @@ class ExampleFS extends window.xen.FileSystem {
 }
 
 window.exampleFS = new ExampleFS();
-await window.xen.vfs.mount('/example', window.exampleFS);
+await window.novea.vfs.mount('/example', window.exampleFS);

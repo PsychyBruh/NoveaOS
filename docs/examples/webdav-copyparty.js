@@ -1,5 +1,5 @@
-// Vibecoded WebDAV (Made for Copyparty) FS implementation
-class WebDAVFS extends window.xen.FileSystem {
+﻿// Vibecoded WebDAV (Made for Copyparty) FS implementation
+class WebDAVFS extends window.novea.FileSystem {
     constructor(baseUrl, username, password) {
         super();
         this.baseUrl = baseUrl.endsWith('/') ? baseUrl.slice(0, -1) : baseUrl;
@@ -21,7 +21,7 @@ class WebDAVFS extends window.xen.FileSystem {
             requestHeaders['Content-Type'] = 'text/plain; charset=utf-8';
         }
 
-        const response = await window.xen.net.fetch(url, {
+        const response = await window.novea.net.fetch(url, {
             method,
             headers: requestHeaders,
             body
@@ -192,4 +192,4 @@ class WebDAVFS extends window.xen.FileSystem {
 }
 
 window.webdavFS = new WebDAVFS('https://your.webdav_or_copyparty.server', 'username (if copyparty, probably `k`', 'password');
-await window.xen.vfs.mount('/webdav', window.webdavFS);
+await window.novea.vfs.mount('/webdav', window.webdavFS);

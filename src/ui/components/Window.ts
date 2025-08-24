@@ -1,4 +1,4 @@
-import { WindowManager } from "../apis/WindowManager";
+﻿import { WindowManager } from "../apis/WindowManager";
 import { v4 as uuidv4 } from "uuid";
 
 export interface WindowOpts {
@@ -58,7 +58,7 @@ export class Window {
         this.id = uuidv4();
         this.props.title = opts.title || 'Window';
         if (opts.icon) {
-            this.props.icon = window.xen.net.encodeUrl(opts.icon)
+            this.props.icon = window.novea.net.encodeUrl(opts.icon)
         } else {
             this.props.icon = '/assets/logo.svg';
         }
@@ -70,7 +70,7 @@ export class Window {
         this.props.y =
             opts.y ||
             Math.random() *
-            (window.innerHeight - 400 - window.xen.taskBar.getHeight() - 50);
+            (window.innerHeight - 400 - window.novea.taskBar.getHeight() - 50);
         this.props.resizable = opts.resizable ?? true;
         this.props.display = opts.display ?? true;
         this.props.borderless = opts.borderless ?? false;
@@ -142,7 +142,7 @@ export class Window {
             this.el.content.setAttribute("allowfullscreen", "true");
 
             this.el.window.appendChild(this.el.content);
-            (this.el.content as HTMLIFrameElement).src = window.xen.net.encodeUrl(
+            (this.el.content as HTMLIFrameElement).src = window.novea.net.encodeUrl(
                 this.props.url,
             );
 
@@ -150,14 +150,14 @@ export class Window {
                 const iframe = (this.el.content as HTMLIFrameElement);
 
                 Object.assign(iframe.contentWindow, {
-                    xen: window.xen
+                    xen: window.novea
                 });
 
                 if (this.props.xenFilePicker == true) {
                     //@ts-ignore
-                    iframe.contentWindow.window.showOpenFilePicker = window.xen.polyfill.sofp;
+                    iframe.contentWindow.window.showOpenFilePicker = window.novea.polyfill.sofp;
                     //@ts-ignore
-                    iframe.contentWindow.window.showDirectoryPicker = window.xen.polyfill.sdp;
+                    iframe.contentWindow.window.showDirectoryPicker = window.novea.polyfill.sdp;
                 }
             };
         } else if (this.props.content) {
@@ -549,10 +549,10 @@ export class Window {
         }
     }
     set url(v: string) {
-        this.props.url = window.xen.net.encodeUrl(v);
+        this.props.url = window.novea.net.encodeUrl(v);
 
         if (this.el.content instanceof HTMLIFrameElement) {
-            this.el.content.src = window.xen.net.encodeUrl(v);
+            this.el.content.src = window.novea.net.encodeUrl(v);
         }
     }
     set display(v: boolean) {

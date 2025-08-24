@@ -1,4 +1,4 @@
-import { VFS } from "../../apis/files/VFS/VFS";
+﻿import { VFS } from "../../apis/files/VFS/VFS";
 
 interface FilePickerResult {
     path: string | string[];
@@ -28,7 +28,7 @@ export class FilePicker {
     };
 
     constructor(options: FilePickerOptions = {}) {
-        this.fs = window.xen.fs;
+        this.fs = window.novea.fs;
         this.options = {
             title: "Select a File",
             mode: "file",
@@ -312,7 +312,7 @@ export class FilePicker {
                 } else if (entry.stat) {
                     const size = this.formatFileSize(entry.stat.size);
                     const date = entry.stat.lastModified.toLocaleDateString();
-                    meta.innerHTML = `<i class="fa-solid fa-file"></i> ${size} • ${date}`;
+                    meta.innerHTML = `<i class="fa-solid fa-file"></i> ${size} â€¢ ${date}`;
                 }
 
                 details.appendChild(name);
@@ -531,12 +531,12 @@ export class FilePicker {
     }
 
     private setupContextMenu(): void {
-    window.xen.contextMenu.attach(this.el.content, {
+    window.novea.contextMenu.attach(this.el.content, {
         root: [
             {
                 title: "New File",
                 onClick: async () => {
-                    const name = await window.xen.dialog.prompt({
+                    const name = await window.novea.dialog.prompt({
                         title: "New File",
                         placeholder: "Filename",
                     });
@@ -553,7 +553,7 @@ export class FilePicker {
             {
                 title: "New Folder",
                 onClick: async () => {
-                    const name = await window.xen.dialog.prompt({
+                    const name = await window.novea.dialog.prompt({
                         title: "New Folder",
                         placeholder: "Folder name",
                     });

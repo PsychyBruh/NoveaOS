@@ -1,4 +1,4 @@
-class Main {
+﻿class Main {
     constructor(kv) {
         this.kv = kv;
     }
@@ -21,7 +21,7 @@ class Main {
         this.createNewTab();
         // this.renderBookmarksBar();
 
-        //const bookmarksVisible = parent.xen?.settings?.get('bookmarks-visible') ?? true;
+        //const bookmarksVisible = parent.novea?.settings?.get('bookmarks-visible') ?? true;
         // this.toggleBookmarksBar(bookmarksVisible);
 
         const savedWidth = await this.kv.get('sidebar-width') || 250;

@@ -19,6 +19,7 @@ import { Systray } from "./ui/apis/Systray";
 import { FilePicker } from "./ui/apis/FilePicker";
 import { sofp, sdp } from "./apis/files/polyfill";
 import { updater } from "./core/update";
+import { OSUpdateManager } from "./core/os-update";
 import { platform } from "./apis/platform";
 import { NoveaShell } from "./apis/shell/NoveaShell";
 import { URI } from "./apis/URI";
@@ -29,8 +30,8 @@ export class Novea {
     public fs: VFS = this.vfs.vfs;
     public VFS: typeof VFS = VFS;
     public FileSystem: typeof FileSystem = FileSystem;
-    public net: LibcurlClient = new LibcurlClient();
-    public p2p: P2PClient = new P2PClient();
+    public net!: LibcurlClient;
+    public p2p!: P2PClient;
     public wm: WindowManager = new WindowManager();
     public process: ProcessManager = new ProcessManager();
     public packages: PackageManager = new PackageManager();
@@ -52,6 +53,7 @@ export class Novea {
         sdp: sdp
     };
     public update: typeof updater = updater;
+    public osUpdate: OSUpdateManager = new OSUpdateManager();
     public platform: typeof platform = platform;
     public shell: typeof NoveaShell = NoveaShell;
     public uri: URI = new URI();
@@ -70,5 +72,9 @@ export class Novea {
     async init() {
         this.version.build += `${(await (await fetch('/uuid')).text()).split('\n')[0]}`;
         this.version.pretty = `${this.version.prefix} ${this.version.codename} v${this.version.major}.${this.version.minor}.${this.version.patch} ${this.version.channel} (${this.version.build})`;
+        
+        // Initialize networking components after window.novea is available
+        this.net = new LibcurlClient();
+        this.p2p = new P2PClient();
     }
 }

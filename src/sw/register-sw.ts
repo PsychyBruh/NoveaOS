@@ -1,4 +1,4 @@
-async function initComlink() {
+﻿async function initComlink() {
     const { port1, port2 } = new MessageChannel();
     const msg = {
         target: 'comlink-init',
@@ -40,7 +40,7 @@ export async function initSw() {
             const { options } = ev.data;
 
             try {
-                const result = await window.xen.FilePicker.pick({
+                const result = await window.novea.FilePicker.pick({
                     title: options.type === 'folder' ? 'Select Folder' : 'Select File',
                     multiple: options.multiple,
                     mode: options.mode

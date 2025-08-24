@@ -1,9 +1,9 @@
-class Main {
+﻿class Main {
     async init() {
-        this.repoStore = parent.xen.repos;
-        this.packages = parent.xen.packages;
-        this.notifications = parent.xen.notifications;
-        this.dialog = parent.xen.dialog;
+        this.repoStore = parent.novea.repos;
+        this.packages = parent.novea.packages;
+        this.notifications = parent.novea.notifications;
+        this.dialog = parent.novea.dialog;
 
         this.currentRepo = null;
         this.currentPackages = [];
@@ -44,7 +44,7 @@ class Main {
             let title = "";
 
             if (repo.type == 'xen') {
-                const res = await parent.xen.net.fetch(repo.url + 'manifest.json');
+                const res = await parent.novea.net.fetch(repo.url + 'manifest.json');
                 const json = await res.json();
 
                 title = json.title;

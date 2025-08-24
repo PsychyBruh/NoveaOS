@@ -1,11 +1,11 @@
-import { XenShell } from "./XenShell";
+﻿import { XenShell } from "./XenShell";
 
 export const commands = [
     {
         name: "ls",
         callback: async (args: string[], shell: XenShell) => {
             const path = args[0] ? shell["resolvePath"](args[0]) : shell.getCwd();
-            const entries = await window.xen.fs.list(path);
+            const entries = await window.novea.fs.list(path);
             return entries.map((e) => e.name).join("\n");
         }
     },
@@ -15,7 +15,7 @@ export const commands = [
             const path = args[0]
                 ? shell["resolvePath"](args[0])
                 : shell.getEnv("HOME")!;
-            await window.xen.fs.cd(path);
+            await window.novea.fs.cd(path);
             shell.setCwd(path);
         }
     },
@@ -39,25 +39,25 @@ export const commands = [
         name: "touch",
         callback: async (args: string[], shell: XenShell) => {
             const path = shell["resolvePath"](args[0]);
-            await window.xen.fs.write(path, "");
+            await window.novea.fs.write(path, "");
         }
     },
     {
         name: "mkdir",
         callback: async (args: string[], shell: XenShell) => {
-            await window.xen.fs.mkdir(shell["resolvePath"](args[0]));
+            await window.novea.fs.mkdir(shell["resolvePath"](args[0]));
         }
     },
     {
         name: "rm",
         callback: async (args: string[], shell: XenShell) => {
-            await window.xen.fs.rm(shell["resolvePath"](args[0]));
+            await window.novea.fs.rm(shell["resolvePath"](args[0]));
         }
     },
     {
         name: "cat",
         callback: async (args: string[], shell: XenShell) => {
-            return await window.xen.fs.read(
+            return await window.novea.fs.read(
                 shell["resolvePath"](args[0]),
                 "text"
             ) as string;
@@ -70,7 +70,7 @@ export const commands = [
             let data = "";
 
             if (args[1]) {
-                data = (await window.xen.fs.read(
+                data = (await window.novea.fs.read(
                     shell["resolvePath"](args[1]),
                     "text"
                 )) as string;
@@ -112,43 +112,43 @@ export const commands = [
     {
         name: "zip",
         callback: async (args: string[]) => {
-            await window.xen.fs.compress(args[0], args[1]);
+            await window.novea.fs.compress(args[0], args[1]);
         }
     },
     {
         name: "unzip",
         callback: async (args: string[]) => {
-            await window.xen.fs.decompress(args[0], args[1]);
+            await window.novea.fs.decompress(args[0], args[1]);
         }
     },
     {
         name: "link",
         callback: async (args: string[]) => {
-            await window.xen.fs.link(args[0], args[1]);
+            await window.novea.fs.link(args[0], args[1]);
         }
     },
     {
         name: "readlink",
         callback: async (args: string[]) => {
-            return await window.xen.fs.readlink(args[0]);
+            return await window.novea.fs.readlink(args[0]);
         }
     },
     {
         name: "unlink",
         callback: async (args: string[]) => {
-            await window.xen.fs.unlink(args[0]);
+            await window.novea.fs.unlink(args[0]);
         }
     },
     {
         name: "mount",
         callback: async (args: string[]) => {
-            await window.xen.fs.mount(args[0]);
+            await window.novea.fs.mount(args[0]);
         }
     },
     {
         name: "umount",
         callback: async (args: string[]) => {
-            await window.xen.fs.unmount(args[0]);
+            await window.novea.fs.unmount(args[0]);
         }
     },
     {

@@ -12,7 +12,7 @@ export class NoveaTransport {
         headers: any,
         signal: AbortSignal | undefined,
     ): Promise<any> {
-        const payload = await window.xen.net.fetch(remote.href, {
+        const payload = await window.novea.net.fetch(remote.href, {
             method,
             headers: headers,
             body,
@@ -56,7 +56,7 @@ export class NoveaTransport {
             (data: Blob | ArrayBuffer | string) => void,
             (code: number, reason: string) => void,
         ] {
-        const socket = new window.xen.net.WebSocket(url.toString(), protocols, {
+        const socket = new window.novea.net.WebSocket(url.toString(), protocols, {
             headers: requestHeaders,
         });
 

@@ -1,4 +1,4 @@
-class FirewallApp {
+﻿class FirewallApp {
     constructor() {
         this.p2pClient = null;
         this.ports = new Map();
@@ -126,7 +126,7 @@ class FirewallApp {
         const currentDescription = this.ports.get(port)?.description || '';
 
         try {
-            const newDescription = await parent.xen.dialog.prompt({
+            const newDescription = await parent.novea.dialog.prompt({
                 title: 'Edit Port Description',
                 body: `Enter a description for port ${port}:`,
                 placeholder: currentDescription || 'Enter description...'

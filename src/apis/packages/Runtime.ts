@@ -1,4 +1,4 @@
-import { Manifest } from "./PackageManager";
+﻿import { Manifest } from "./PackageManager";
 
 export class Runtime {
     public async exec(manifest: Manifest, args?: any) {
@@ -19,7 +19,7 @@ export class Runtime {
             }
         } else {
             //@ts-ignore
-            url = window.__uv$config.prefix + window.__uv$config.encodeUrl(manifest.source);
+            url = window.__nn$config.prefix + window.__nn$config.encodeUrl(manifest.source);
         }
 
         if (manifest.icon) {
@@ -30,7 +30,7 @@ export class Runtime {
 
         if (manifest.type == 'webview' || manifest.type == 'app') {
             code = `
-                const win = window.xen.wm.create({
+                const win = window.novea.wm.create({
                     title: "${manifest.title}",
                     icon: "${icon}",
                     url: "${url}",
@@ -41,12 +41,12 @@ export class Runtime {
                 });
                 
                 if (window.__PID__ !== undefined) {
-                    window.xen.process.associateWindow(window.__PID__, win.id);
+                    window.novea.process.associateWindow(window.__PID__, win.id);
                     
                     win.onClose((closingWin) => {
                         setTimeout(() => {
                             if (window.__PID__ !== undefined) {
-                                window.xen.process.kill(window.__PID__);
+                                window.novea.process.kill(window.__PID__);
                             }
                         }, 0);
                     });
@@ -59,7 +59,7 @@ export class Runtime {
             code = res;
         }
 
-        const pid = await window.xen.process.spawn({
+        const pid = await window.novea.process.spawn({
             async: true,
             type: 'direct',
             content: code,
@@ -72,7 +72,7 @@ export class Runtime {
         const path = `/usr/libs/${manifest.id}/${manifest.source}`;
 
         try {
-            const code = await window.xen.fs.read(path, 'text');
+            const code = await window.novea.fs.read(path, 'text');
             //@ts-ignore
             const blob = new Blob([code], { type: 'application/javascript' });
             const blobUrl = URL.createObjectURL(blob);

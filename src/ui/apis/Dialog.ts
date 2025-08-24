@@ -1,4 +1,4 @@
-interface DialogOptions {
+﻿interface DialogOptions {
     title?: string;
     body?: string;
     icon?: string;
@@ -48,7 +48,7 @@ export class Dialog {
         </style>
       `;
 
-            const win = window.xen.wm.create({
+            const win = window.novea.wm.create({
                 title: 'Dialog',
                 icon: '/assets/logo.svg',
                 width: 'auto',
@@ -57,7 +57,7 @@ export class Dialog {
                 resizable: false
             });
 
-            window.xen.wm.focus(win, 9999);
+            window.novea.wm.focus(win, 9999);
 
             const okBtn = win.el.window.querySelector('.dialog-btn-ok');
             const cancelBtn = win.el.window.querySelector('.dialog-btn-cancel');

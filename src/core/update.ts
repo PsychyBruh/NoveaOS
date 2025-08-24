@@ -1,7 +1,7 @@
 async function install(type: 'apps' | 'libs') {
     const req = await fetch('/files.json');
     const res = await req.json();
-    const fs = window.xen.fs;
+    const fs = window.novea.fs;
     let index: number;
 
     if (type == 'apps') {
@@ -21,7 +21,7 @@ async function install(type: 'apps' | 'libs') {
                     if (!filename.endsWith('.zip')) continue;
 
                     const path = `/${type}/${filename}`;
-                    await window.xen.packages.install('url', path);
+                    await window.novea.packages.install('url', path);
                 }
             }
         }
@@ -39,13 +39,13 @@ export async function update() {
 }
 
 export async function updater() {
-    if (await window.xen.fs.exists('/system')) {
-        await window.xen.fs.rm('/system');
+    if (await window.novea.fs.exists('/system')) {
+        await window.novea.fs.rm('/system');
     }
 
     await update();
 
-    window.xen.settings.set('build-cache', window.xen.version.build);
+    window.novea.settings.set('build-cache', window.novea.version.build);
     
     const reg = await navigator.serviceWorker.getRegistration();
     if (reg) {

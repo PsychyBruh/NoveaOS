@@ -1,9 +1,9 @@
-export async function init() {
+﻿export async function init() {
     let scripts: any;
     let doScripts: boolean;
 
     try {
-        scripts = await window.xen.fs.list('/usr/init');
+        scripts = await window.novea.fs.list('/usr/init');
         doScripts = true;
     } catch {
         doScripts = false;
@@ -12,9 +12,9 @@ export async function init() {
     if (doScripts == true) {
         scripts.forEach(async (el) => {
             if (el.isFile == true) {
-                const script = (await window.xen.fs.read(`/init/${el.name}`, 'text') as string);
+                const script = (await window.novea.fs.read(`/init/${el.name}`, 'text') as string);
 
-                window.xen.process.spawn({
+                window.novea.process.spawn({
                     async: true,
                     type: 'direct',
                     content: script
@@ -23,11 +23,11 @@ export async function init() {
         });
     }
 
-    const startUp = (window.xen.settings.get('startup')) as string[] | undefined;
+    const startUp = (window.novea.settings.get('startup')) as string[] | undefined;
 
     if (startUp) {
         for (const id of startUp) {
-            await window.xen.packages.open(id);
+            await window.novea.packages.open(id);
         }
     }
 }

@@ -1,6 +1,6 @@
-export async function sofp(options: any = {}) {
+﻿export async function sofp(options: any = {}) {
     const opts = { multiple: !!options.multiple };
-    const res = await window.xen.FilePicker.pick(opts);
+    const res = await window.novea.FilePicker.pick(opts);
 
     if (res === null) {
         throw new DOMException('The user aborted a request', 'AbortError');
@@ -28,14 +28,14 @@ export async function sofp(options: any = {}) {
 }
 
 export async function sdp() {
-    const res = await window.xen.FilePicker.pick({ mode: 'directory' });
+    const res = await window.novea.FilePicker.pick({ mode: 'directory' });
 
     if (res === null) {
         throw new DOMException('The user aborted a request', 'AbortError');
     }
 
     const dirPath = Array.isArray(res.path) ? res.path[0] : res.path;
-    const fs = window.xen.fs;
+    const fs = window.novea.fs;
 
     function createFileHandle(path: string) {
         const name = path.split('/').pop() || '';

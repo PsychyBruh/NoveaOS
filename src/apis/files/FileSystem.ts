@@ -1,4 +1,4 @@
-import JSZip from "jszip";
+﻿import JSZip from "jszip";
 import mime from "mime";
 
 export interface FileEntryInfo {
@@ -124,7 +124,7 @@ export abstract class FileSystem {
     }
 
     async open(path: string, callback?: (path: string, url: string, mime: string) => void): Promise<void> {
-        const xen = window.xen;
+        const novea = window.novea;
         const blob = await this.read(path, 'blob');
         const url = URL.createObjectURL(blob as Blob);
         const mt = mime.getType(path) || 'application/octet-stream';
@@ -207,7 +207,7 @@ export abstract class FileSystem {
     }
 
     async fetch(url: string, path: string): Promise<void> {
-        const res = await window.xen.net.fetch(url);
+        const res = await window.novea.net.fetch(url);
         if (!res.ok) throw new Error(`Fetch failed: ${res.statusText} (${res.status})`);
 
         const blob = await res.blob();

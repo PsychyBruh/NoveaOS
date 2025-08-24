@@ -29,11 +29,11 @@ export class P2PClient {
             this.peerId = this.genId();
         }
         
-        this.p2pUrl = window.xen.settings.get('p2p-url');
+        this.p2pUrl = window.novea.settings.get('p2p-url');
 
         if (!this.p2pUrl) {
-            window.xen.settings.set('p2p-url', (location.protocol === "https:" ? "wss" : "ws") + "://" + location.host + "/p2p/");
-            this.p2pUrl = window.xen.settings.get('p2p-url');
+            window.novea.settings.set('p2p-url', (location.protocol === "https:" ? "wss" : "ws") + "://" + location.host + "/p2p/");
+            this.p2pUrl = window.novea.settings.get('p2p-url');
         }
         
         this.setUrl(this.p2pUrl);
@@ -353,14 +353,14 @@ export class P2PClient {
                 };
             }
     
-            if (window.xen?.net?.loopback?.resolver?.[port]) {
+            if (window.novea?.net?.loopback?.resolver?.[port]) {
                 const req = new Request(url, {
                     method,
                     headers: headers ? new Headers(headers) : undefined,
                     body: body ? JSON.stringify(body) : undefined
                 });
                 
-                const response = await window.xen.net.loopback.call(port, req);
+                const response = await window.novea.net.loopback.call(port, req);
                 
                 return {
                     id,

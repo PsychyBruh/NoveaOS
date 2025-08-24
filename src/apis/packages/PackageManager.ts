@@ -1,4 +1,4 @@
-import { Runtime } from './Runtime';
+﻿import { Runtime } from './Runtime';
 import { packageHandler } from '../policy/handler';
 import JSZip from 'jszip';
 
@@ -73,7 +73,7 @@ export class PackageManager {
     }
 
     public async getRegs(type: 'apps' | 'libs'): Promise<string[]> {
-        const regs = window.xen.settings.get(type);
+        const regs = window.novea.settings.get(type);
         return regs || [];
     }
 
@@ -81,14 +81,14 @@ export class PackageManager {
         type: 'apps' | 'libs',
         packageIds: string[],
     ): Promise<void> {
-        window.xen.settings.set(type, packageIds);
+        window.novea.settings.set(type, packageIds);
     }
 
     public async install(
         source: 'prompt' | 'opfs' | 'url',
         path?: string,
     ): Promise<void> {
-        const fs = window.xen.fs;
+        const fs = window.novea.fs;
         let file: File | null = null;
         let content: ArrayBuffer | Blob;
 
@@ -140,7 +140,7 @@ export class PackageManager {
             if (!manifest) throw new Error('manifest.json not found');
 
             if (!await packageHandler(manifest.id, 'install')) {
-                window.xen.notifications.spawn({
+                window.novea.notifications.spawn({
                     title: "XenOS",
                     description: "This package has been blocked by your policy and cannot be installed",
                     icon: "/assets/logo.svg",
@@ -185,7 +185,7 @@ export class PackageManager {
                 const path = `${pkgPath}/${manifest.installHook}`
                 if (await fs.exists(path)) {
                     const code = (await fs.read(path, 'text')) as string
-                    await window.xen.process.spawn({
+                    await window.novea.process.spawn({
                         async: false,
                         type: 'direct',
                         content: code
@@ -201,7 +201,7 @@ export class PackageManager {
         source: 'prompt' | 'opfs' | 'url',
         path?: string
     ) {
-        const fs = window.xen.fs;
+        const fs = window.novea.fs;
         let file: File | null = null;
         let content: ArrayBuffer | Blob;
 
@@ -285,7 +285,7 @@ export class PackageManager {
         packageId: string,
         type: 'apps' | 'libs' | null = null,
     ): Promise<Manifest | undefined> {
-        const fs = window.xen.fs;
+        const fs = window.novea.fs;
 
         try {
             const types = type ? [type] : ['apps', 'libs'];
@@ -364,11 +364,11 @@ export class PackageManager {
     }
 
     public async remove(packageId: string, type?: string): Promise<void> {
-        const fs = window.xen.fs;
+        const fs = window.novea.fs;
 
         if (!type) {
             if (packageId.startsWith('org.nebulaservices.')) {
-                window.xen.notifications.spawn({
+                window.novea.notifications.spawn({
                     title: "XenOS",
                     description: "This package is a core application and cannot be uninstalled",
                     icon: "/assets/logo.svg",
@@ -379,7 +379,7 @@ export class PackageManager {
             }
 
             if (!await packageHandler(packageId, 'uninstall')) {
-                window.xen.notifications.spawn({
+                window.novea.notifications.spawn({
                     title: "XenOS",
                     description: "This package is force install by your policy and cannot be uninstalled",
                     icon: "/assets/logo.svg",

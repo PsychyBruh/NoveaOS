@@ -1,4 +1,4 @@
-import { PackageManager, Manifest } from '../../apis/packages/PackageManager';
+﻿import { PackageManager, Manifest } from '../../apis/packages/PackageManager';
 
 interface DragState {
     isDragging: boolean;
@@ -40,7 +40,7 @@ export class AppLauncher {
     }
 
     public init() {
-        this.packageManager = window.xen.packages;
+        this.packageManager = window.novea.packages;
         this.setup();
         this.loadAppOrder();
         this.initGlobalShortcut();
@@ -214,7 +214,7 @@ export class AppLauncher {
             title: 'Uninstall',
             onClick: async () => {
                 try {
-                    await window.xen.dialog.confirm({
+                    await window.novea.dialog.confirm({
                         title: 'NoveaOS',
                         icon: '/assets/logo.svg',
                         body: 'Are you sure you would like to uninstall this app?'
@@ -231,7 +231,7 @@ export class AppLauncher {
             },
         });
 
-        window.xen.contextMenu.attach(entry, {
+        window.novea.contextMenu.attach(entry, {
             root: menuItems
         });
     }
@@ -397,11 +397,11 @@ export class AppLauncher {
     }
 
     private saveAppOrder(): void {
-        window.xen.settings.set('app-launcher-order', this.appOrder);
+        window.novea.settings.set('app-launcher-order', this.appOrder);
     }
 
     private loadAppOrder(): void {
-        const saved = window.xen.settings.get('app-launcher-order');
+        const saved = window.novea.settings.get('app-launcher-order');
         if (saved) {
             try {
                 this.appOrder = saved;

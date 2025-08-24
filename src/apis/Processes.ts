@@ -1,4 +1,4 @@
-export interface ProcessOpts {
+﻿export interface ProcessOpts {
     async?: boolean;
     type: 'direct' | 'url' | 'opfs';
     content: string;
@@ -29,12 +29,12 @@ export class ProcessManager {
         if (opts.type === 'direct') return opts.content;
     
         if (opts.type === 'url') {
-            const res = await fetch(window.xen.net.encodeUrl(opts.content));
+            const res = await fetch(window.novea.net.encodeUrl(opts.content));
             return res.text();
         }
 
         // XenFS
-        return window.xen.fs.read(opts.content, 'text') as Promise<string>;
+        return window.novea.fs.read(opts.content, 'text') as Promise<string>;
     }
 
     public async spawn(opts: ProcessOpts): Promise<number> {
@@ -43,7 +43,7 @@ export class ProcessManager {
         const html = `
 <script>
     window.__PID__ = ${pid}
-    window.xen = parent.xen
+    window.novea = parent.novea
 </script>
 <script${opts.async ? ' type="module"' : ''}>
 ${src}
@@ -91,7 +91,7 @@ ${src}
         try {
             if (p.associatedWindows) {
                 p.associatedWindows.forEach(windowId => {
-                    const w = window.xen.wm.windows.find(w => w.id === windowId);
+                    const w = window.novea.wm.windows.find(w => w.id === windowId);
 
                     if (w) {
                         w.closeCbs = [];
@@ -100,7 +100,7 @@ ${src}
                 });
             }
 
-            window.xen.wm.windows.forEach(win => {
+            window.novea.wm.windows.forEach(win => {
                 if (win.el.content instanceof HTMLIFrameElement) {
                     try {
                         const cw = win.el.content.contentWindow;

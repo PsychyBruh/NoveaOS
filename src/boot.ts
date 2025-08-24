@@ -50,11 +50,16 @@ async function setupXen() {
     const novea = new Novea();
     window.novea = novea;
 
+    // Initialize novea first (this creates the networking components)
+    await window.novea.init();
+    
+    // Now initialize the networking components
     await window.novea.net.init();
     await window.novea.p2p.init();
+    
+    // Initialize other components
     await window.novea.vfs.init();
     window.novea.repos.init();
-    await window.novea.init();
 
     window.shared = {};
     window.shared.novea = window.novea;

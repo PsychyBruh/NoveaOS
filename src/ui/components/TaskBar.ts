@@ -1,4 +1,4 @@
-import { Window } from './Window';
+﻿import { Window } from './Window';
 import { AppLauncher } from './AppLauncher';
 import { Calendar } from './Calendar';
 import { Systray } from '../apis/Systray';
@@ -55,7 +55,7 @@ export class TaskBar {
     }
 
     public init() {
-        this.systray = window.xen.systray;
+        this.systray = window.novea.systray;
         this.setupEls();
         this.initBattery();
         this.initTime();
@@ -64,12 +64,12 @@ export class TaskBar {
     }
 
     public async loadPinnedEntries(): Promise<void> {
-        const saved = window.xen.settings.get('pinned-taskbar-entries');
+        const saved = window.novea.settings.get('pinned-taskbar-entries');
         if (saved) {
             this.pinned = [];
             for (const entry of saved) {
                 try {
-                    const manifest = await window.xen.packages.getManifest(entry.appId);
+                    const manifest = await window.novea.packages.getManifest(entry.appId);
                     const iconPath = location.origin + '/fs/usr/apps/' + entry.appId + '/' + manifest.icon;
 
                     this.pinned.push({
@@ -93,7 +93,7 @@ export class TaskBar {
             title: entry.title,
             url: entry.url,
         }));
-        window.xen.settings.set('pinned-taskbar-entries', toSave);
+        window.novea.settings.set('pinned-taskbar-entries', toSave);
     }
 
     private getAppId(url: string): string {
@@ -107,7 +107,7 @@ export class TaskBar {
         if (this.pinned.some(p => p.appId === appId)) return;
 
         try {
-            const manifest = await window.xen.packages.getManifest(appId);
+            const manifest = await window.novea.packages.getManifest(appId);
             const iconPath = location.origin + '/fs/usr/apps/' + appId + '/' + manifest.icon;
 
             const pinnedEntry: PinnedTaskBarEntry = {
@@ -188,7 +188,7 @@ export class TaskBar {
     }
 
     private contextMenu(): void {
-        window.xen.contextMenu.attach(this.el.taskbar, {
+        window.novea.contextMenu.attach(this.el.taskbar, {
             root: [
                 {
                     title: 'Show App Names',
@@ -339,7 +339,7 @@ export class TaskBar {
         });
 
         this.pinned.forEach(pinnedEntry => {
-            const openWindow = Array.from(window.xen.wm.windows).find(win =>
+            const openWindow = Array.from(window.novea.wm.windows).find(win =>
                 this.getAppId(win.props.url) === pinnedEntry.appId && win.props.display
             );
 
@@ -364,7 +364,7 @@ export class TaskBar {
             }
         });
 
-        window.xen.wm.windows.forEach((win) => {
+        window.novea.wm.windows.forEach((win) => {
             if (win.props.display) {
                 const appId = this.getAppId(win.props.url);
                 if (!processed.has(appId)) {
@@ -474,7 +474,7 @@ export class TaskBar {
             menuItems.push({
                 title: 'Open',
                 onClick: async () => {
-                    await window.xen.packages.open(appId);
+                    await window.novea.packages.open(appId);
                 },
             });
         }
@@ -497,7 +497,7 @@ export class TaskBar {
             },
         });
 
-        window.xen.contextMenu.attach(item, {
+        window.novea.contextMenu.attach(item, {
             root: menuItems,
         });
     }
@@ -541,7 +541,7 @@ export class TaskBar {
         let instance = instanceId ? this.current.get(instanceId) : undefined;
 
         if (!instance) {
-            for (const win of window.xen.wm.windows) {
+            for (const win of window.novea.wm.windows) {
                 if (this.getAppId(win.props.url) === this.getAppId(appId)) {
                     instance = win;
                     break;
@@ -563,9 +563,9 @@ export class TaskBar {
             const realAppId = this.getAppId(appId);
 
             if (this.isPinned(realAppId)) {
-                await window.xen.packages.open(realAppId);
+                await window.novea.packages.open(realAppId);
             } else {
-                window.xen.wm.create({ url: appId, title, icon });
+                window.novea.wm.create({ url: appId, title, icon });
             }
         }
     }
@@ -583,7 +583,7 @@ export class TaskBar {
     };
 
     public closeWindow(id: string): void {
-        const win = window.xen.wm.windows.find((win) => win.id === id);
+        const win = window.novea.wm.windows.find((win) => win.id === id);
 
         if (win) {
             const item = this.el.windowList.querySelector(

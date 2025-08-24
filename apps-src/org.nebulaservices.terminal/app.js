@@ -1,4 +1,4 @@
-class Terminal {
+﻿class Terminal {
     constructor() {
         this.sessions = new Map();
         this.activeSessionId = null;
@@ -159,7 +159,7 @@ class TerminalSession {
         this.termEl = termEl;
         this.terminal = terminal;
         
-        this.shell = new parent.xen.shell();
+        this.shell = new parent.novea.shell();
         this.shell.init();
         
         this.currentLine = "";
@@ -518,7 +518,7 @@ class TerminalSession {
                 }
             }
             
-            const entries = await window.xen.fs.list(searchPath);
+            const entries = await window.novea.fs.list(searchPath);
             
             const matches = entries
                 .filter(entry => entry.name.startsWith(filename))
@@ -634,7 +634,7 @@ class TerminalSession {
         for (const name of names) {
             try {
                 const fullPath = this.shell.getCwd() === "/" ? `/${name}` : `${this.shell.getCwd()}/${name}`;
-                const stat = await window.xen.fs.stat(fullPath);
+                const stat = await window.novea.fs.stat(fullPath);
                 
                 const span = document.createElement("span");
                 span.textContent = name;
